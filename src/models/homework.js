@@ -1,6 +1,5 @@
-const { mongo } = require('mongoose');
-const mongoose = require('monngoose');
-const { useId } = require('react');
+const mongoose = require('mongoose');
+
 const homework = new mongoose.Schema({
     subject:String,
     title:String,
