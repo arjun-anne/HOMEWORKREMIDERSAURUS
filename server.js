@@ -1,5 +1,7 @@
-const app = require('./src/app');
-const port = process.env.PORT||5000;
-app.listen(port,()=>{
-    console.log('server is running on http://localhost:5000');
-})
+require("dotenv").config();
+const app = require("./src/app");
+require("./src/agenda");
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log("Server running on port " + PORT);
+});

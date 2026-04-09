@@ -1,21 +1,41 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
-const jwt = require ("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+
 const router = express.Router();
-router.post("/signup",async(req,res)=>{
-    const hashed = await bcrypt.hash(req.body.password,10);
-    await User.create({
-        email:req.body.email,password:hash
-    });
-    res.json({message:"sign up succcess"});
+
+router.post("/signup", async (req, res) => {
+  const hashed = await bcrypt.hash(req.body.password, 10);
+
+  await User.create({
+    name: req.body.name,
+    email: req.body.email,
+    password: hashed
+  });
+
+  res.json({ message: "sign up success" });
 });
-router.post("/login",async(req,res)=>{
-    const user = await User.findOne({email:req.body.email});
-  if(!user)return res.status(400).json({message:"user not found"});
-    const ok = await bcrypt.compare(req.body.password,user.password);
-    if(!ok)return res.status(400).json({message:"wrong password or username if you have one "});
-    const token = jwt.sign({id:user._id},process.env.JWT_SECRET);
-    res.json({token});
+
+router.post("/login", async (req, res) => {
+  const user = await User.findOne({ email: req.body.email });
+
+  if (!user) {
+    return res.status(400).json({ message: "user not found" });
+  }
+
+  const ok = await bcrypt.compare(req.body.password, user.password);
+
+  if (!ok) {
+    return res.status(400).json({ message: "wrong password" });
+  }
+
+  const token = jwt.sign(
+    { userId: user._id },
+    process.env.JWT_SECRET
+  );
+
+  res.json({ token });
 });
-module.exports = router
+
+module.exports = router;
